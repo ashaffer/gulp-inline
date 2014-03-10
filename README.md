@@ -6,7 +6,8 @@ Inline styles and scripts into an html file.
 ## Example
 
 ```javascript
-var uglify = require('gulp-uglify')
+var inline = require('gulp-inline')
+  , uglify = require('gulp-uglify')
   , minifyCss = require('gulp-minify-css');
 
 gulp.src('public/index.html')
