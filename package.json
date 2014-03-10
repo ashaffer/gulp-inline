@@ -1,0 +1,28 @@
+{
+  "name": "gulp-inline",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ashaffer/gulp-inline.git"
+  },
+  "author": "ashaffer",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ashaffer/gulp-inline/issues"
+  },
+  "homepage": "https://github.com/ashaffer/gulp-inline",
+  "dependencies": {
+    "event-stream": "~3.1.0",
+    "cheerio": "~0.13.1",
+    "gulp": "~3.5.5",
+    "lodash": "~2.4.1",
+    "through2": "~0.4.1",
+    "chai": "~1.9.0",
+    "gulp-util": "~2.2.14"
+  }
+}
