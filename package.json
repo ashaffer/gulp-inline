@@ -16,13 +16,16 @@
     "url": "https://github.com/ashaffer/gulp-inline/issues"
   },
   "homepage": "https://github.com/ashaffer/gulp-inline",
+  "devDependencies": {
+    "chai": "~1.9.0",
+    "mocha": "*"
+  },
   "dependencies": {
     "event-stream": "~3.1.0",
     "cheerio": "~0.13.1",
     "gulp": "~3.5.5",
     "lodash": "~2.4.1",
     "through2": "~0.4.1",
-    "chai": "~1.9.0",
     "gulp-util": "~2.2.14"
   }
 }
