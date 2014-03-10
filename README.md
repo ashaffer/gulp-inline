@@ -1,5 +1,6 @@
 gulp-inline
 ===========
+[![Build Status](https://drone.io/github.com/ashaffer/gulp-inline/status.png)](https://drone.io/github.com/ashaffer/gulp-inline/latest)
 
 Inline styles and scripts into an html file.
 
