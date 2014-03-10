@@ -34,7 +34,7 @@ function injectStyles($, process, base, cb) {
     var done = _.after(styles.length, cb);
     _.each(styles, function(el) {
       gulp.src(path.join(base, el.attr('href')))
-        .pipe(process())
+        .pipe(process)
         .pipe(replace(el, styleTmpl))
         .pipe(through.obj(function(file, enc, cb) {
           cb();
@@ -57,7 +57,7 @@ function injectScripts($, process, base, cb) {
     var done = _.after(scripts.length, cb);
     _.each(scripts, function(el) {
       gulp.src(path.join(base, el.attr('src')))
-        .pipe(process())
+        .pipe(process)
         .pipe(replace(el, scriptTmpl))
         .pipe(through.obj(function(file, enc, cb) {
           cb();
@@ -68,7 +68,6 @@ function injectScripts($, process, base, cb) {
 }
 
 module.exports = function(opts) {
-  var data = '';
   return through.obj(function(file, enc, cb) {
     var $ = cheerio.load(String(file.contents))
       , self = this
@@ -78,10 +77,10 @@ module.exports = function(opts) {
         cb();
       });
 
-    opts = _.defaults(opts || {}, {
-      css: gutil.noop,
-      js: gutil.noop
-    });
+    opts = opts || {};
+    opts.base = opts.base || '';
+    opts.css = opts.css || gutil.noop();
+    opts.js = opts.js || gutil.noop();
 
     injectStyles($, opts.css, opts.base, done);
     injectScripts($, opts.js, opts.base, done);
