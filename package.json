@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "coveralls": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
   },
   "repository": {
     "type": "git",
@@ -18,7 +19,9 @@
   "homepage": "https://github.com/ashaffer/gulp-inline",
   "devDependencies": {
     "chai": "~1.9.0",
-    "mocha": "*"
+    "mocha": "*",
+    "coveralls": "~2.8.0",
+    "mocha-lcov-reporter": "0.0.1"
   },
   "dependencies": {
     "event-stream": "~3.1.0",
