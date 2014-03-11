@@ -3,15 +3,29 @@ var chai = require('chai')
   , gulp = require('gulp')
   , through = require('through2')
   , fs = require('fs')
+  , path = require('path')
   , inline = require('../');
 
 describe('gulp-inline', function() {
-  it('should inline a basic template', function(done) {
-    gulp.src('test/fixtures/basic.html')
-      .pipe(inline({base: 'test/fixtures'}))
+  function inputOutput(name, done) {
+    var base = 'test/fixtures';
+    gulp.src(path.join(base, name + '.html'))
+      .pipe(inline({base: base}))
       .on('data', function(file) {
-        expect(String(file.contents)).to.equal(fs.readFileSync('test/fixtures/basic-output.html', 'utf8'));
+        expect(String(file.contents)).to.equal(fs.readFileSync(path.join(base, name + '-output.html'), 'utf8'));
         done();
       });
+  }
+
+  it('should inline a basic template', function(done) {
+    inputOutput('basic', done);
+  });
+
+  it('should inline a stylesheet with no script', function(done) {
+    inputOutput('no-script', done);
+  });
+
+  it('should inline a script with no stylesheet', function(done) {
+    inputOutput('no-style', done);
   });
 });
