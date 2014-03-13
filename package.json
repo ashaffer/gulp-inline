@@ -25,6 +25,14 @@
     "coverage-badge": "git://github.com/ashaffer/node-coverage-badge#patch-1",
     "istanbul": "~0.2.6"
   },
+  "keywords": [
+    "inline",
+    "gulp",
+    "gulp inline",
+    "inline css",
+    "inline js",
+    "compress html"
+  ],
   "dependencies": {
     "event-stream": "~3.1.0",
     "cheerio": "~0.13.1",
