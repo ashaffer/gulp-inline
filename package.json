@@ -19,7 +19,7 @@
   "homepage": "https://github.com/ashaffer/gulp-inline",
   "devDependencies": {
     "chai": "~1.9.0",
-    "mocha": "*",
+    "mocha": "*"
   },
   "keywords": [
     "inline",
