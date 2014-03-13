@@ -20,8 +20,6 @@
   "devDependencies": {
     "chai": "~1.9.0",
     "mocha": "*",
-    "lcov-parse": "0.0.6",
-    "istanbul": "~0.2.6"
   },
   "keywords": [
     "inline",
