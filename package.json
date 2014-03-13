@@ -20,10 +20,10 @@
   "devDependencies": {
     "chai": "~1.9.0",
     "mocha": "*",
-    "mocha-lcov-reporter": "0.0.1",
     "lcov-parse": "0.0.6",
     "coverage-percentage": "0.0.0",
-    "coverage-badge": "git://github.com/ashaffer/node-coverage-badge#patch-1"
+    "coverage-badge": "git://github.com/ashaffer/node-coverage-badge#patch-1",
+    "istanbul": "~0.2.6"
   },
   "dependencies": {
     "event-stream": "~3.1.0",
