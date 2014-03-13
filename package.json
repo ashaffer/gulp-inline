@@ -21,7 +21,7 @@
     "chai": "~1.9.0",
     "mocha": "*",
     "lcov-parse": "0.0.6",
-    "coverage-percentage": "0.0.0",
+    "coverage-percentage": ">=0.0.1",
     "coverage-badge": "git://github.com/ashaffer/node-coverage-badge#patch-1",
     "istanbul": "~0.2.6"
   },
