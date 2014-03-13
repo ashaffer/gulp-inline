@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "istanbul test ./node_modules/mocha/bin/_mocha --report html -- -R spec"
+    "test": "istanbul test ./node_modules/mocha/bin/_mocha --report lcov -- -R spec",
+    "badge": "coverage-badge `coverage-percentage ./coverage/lcov.info --lcov` badge.png"
   },
   "repository": {
     "type": "git",
@@ -19,7 +20,10 @@
   "devDependencies": {
     "chai": "~1.9.0",
     "mocha": "*",
-    "mocha-lcov-reporter": "0.0.1"
+    "mocha-lcov-reporter": "0.0.1",
+    "lcov-parse": "0.0.6",
+    "coverage-percentage": "0.0.0",
+    "coverage-badge": "git://github.com/ashaffer/node-coverage-badge#patch-1"
   },
   "dependencies": {
     "event-stream": "~3.1.0",
