@@ -1,7 +1,7 @@
 {
   "name": "gulp-inline",
   "version": "0.0.3",
-  "description": "",
+  "description": "Inline styles and scripts into an html file.",
   "main": "index.js",
   "scripts": {
     "test": "istanbul test ./node_modules/mocha/bin/_mocha --report lcov -- -R spec",
