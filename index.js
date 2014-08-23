@@ -27,6 +27,18 @@ var typeMap = {
     getSrc: function(el) {
       return el.attr('src');
     }
+  },
+
+  svg: {
+    tag: 'img',
+    template: '<%= contents %>',
+    test: function(el) {
+      var src = el.attr('src');
+      return /\.svg$/.test(src) && isLocal(src);
+    },
+    getSrc: function(el) {
+      return el.attr('src');
+    }
   }
 };
 
