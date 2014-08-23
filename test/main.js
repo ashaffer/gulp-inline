@@ -25,6 +25,10 @@ describe('gulp-inline', function() {
     inputOutput('js', done);
   });
 
+  it('should inline SVG', function(done) {
+    inputOutput('svg', done);
+  });
+
   it('should inline a basic template', function(done) {
     inputOutput('basic', done);
   });
