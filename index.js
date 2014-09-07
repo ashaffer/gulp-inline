@@ -7,7 +7,7 @@ var through = require('through2')
   , path = require('path');
 
 function isLocal(href) {
-  return href && ! url.parse(href).hostname;
+  return href && href.slice(0, 2) !== '//' && ! url.parse(href).hostname;
 }
 
 var styleTmpl = '<style>\n<%= contents %>\n</style>'
