@@ -17,15 +17,19 @@ describe('gulp-inline', function() {
       });
   }
 
+  it('should inline a stylesheet', function(done) {
+    inputOutput('css', done);
+  });
+
+  it('should inline a script', function(done) {
+    inputOutput('js', done);
+  });
+
+  it('should inline SVG', function(done) {
+    inputOutput('svg', done);
+  });
+
   it('should inline a basic template', function(done) {
     inputOutput('basic', done);
-  });
-
-  it('should inline a stylesheet with no script', function(done) {
-    inputOutput('no-script', done);
-  });
-
-  it('should inline a script with no stylesheet', function(done) {
-    inputOutput('no-style', done);
   });
 });
