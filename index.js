@@ -4,7 +4,8 @@ var through = require('through2')
   , _ = require('lodash')
   , url = require('url')
   , gutil = require('gulp-util')
-  , path = require('path');
+  , path = require('path')
+  , fs = require('fs');
 
 var typeMap = {
   css: {
@@ -67,12 +68,16 @@ function inject($, process, base, cb, opts) {
   if(items.length) {
     var done = _.after(items.length, cb);
     _.each(items, function(el) {
-      gulp.src(path.join(base, opts.getSrc(el)))
-        .pipe(process)
-        .pipe(replace(el, opts.template))
-        .pipe(through.obj(function(file, enc, cb) {
-          cb();
-        }, done));
+      if (fs.existsSync(path.join(base, opts.getSrc(el)))) {
+        gulp.src(path.join(base, opts.getSrc(el)))
+          .pipe(process)
+          .pipe(replace(el, opts.template))
+          .pipe(through.obj(function(file, enc, cb) {
+            cb();
+          }, done));
+      } else {
+        done();
+      }
     });
   } else {
     cb();
