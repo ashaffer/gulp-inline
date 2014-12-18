@@ -1,17 +1,17 @@
-var through = require('through2')
-  , cheerio = require('cheerio')
-  , gulp = require('gulp')
-  , _ = require('lodash')
-  , url = require('url')
-  , gutil = require('gulp-util')
-  , path = require('path')
-  , fs = require('fs');
+var through = require('through2');
+var cheerio = require('cheerio');
+var gulp = require('gulp');
+var url = require('url');
+var path = require('path');
+var fs = require('fs');
 
 var typeMap = {
   css: {
     tag: 'link',
-    template: '<style>\n<%= contents %>\n</style>',
-    test: function(el) {
+    template: function(contents) {
+      return '<style>\n' + contents + '\n</style>'
+    },
+    filter: function(el) {
       return el.attr('rel') === 'stylesheet' && isLocal(el.attr('href'));
     },
     getSrc: function(el) {
@@ -21,8 +21,10 @@ var typeMap = {
 
   js: {
     tag: 'script',
-    template: '<script type="text/javascript">\n<%= contents %>\n</script>',
-    test: function(el) {
+    template: function(contents) {
+      return '<script type="text/javascript">\n' + contents + '\n</script>';
+    },
+    filter: function(el) {
       return el.attr('type') === 'text/javascript' && isLocal(el.attr('src'));
     },
     getSrc: function(el) {
@@ -32,8 +34,10 @@ var typeMap = {
 
   svg: {
     tag: 'img',
-    template: '<%= contents %>',
-    test: function(el) {
+    template: function(contents) {
+      return contents;
+    },
+    filter: function(el) {
       var src = el.attr('src');
       return /\.svg$/.test(src) && isLocal(src);
     },
@@ -43,13 +47,28 @@ var typeMap = {
   }
 };
 
+function noop() {
+  return through.obj(function(file, enc, cb) {
+    this.push(file);
+    cb();
+  });
+}
+
+function after(n, cb) {
+  var i = 0;
+  return function() {
+    i++;
+    if(i === n) cb.apply(this, arguments);
+  };
+}
+
 function isLocal(href) {
   return href && href.slice(0, 2) !== '//' && ! url.parse(href).hostname;
 }
 
 function replace(el, tmpl) {
   return through.obj(function(file, enc, cb) {
-    el.replaceWith(_.template(tmpl, {contents: String(file.contents)}));
+    el.replaceWith(tmpl(String(file.contents)));
     this.push(file);
     cb();
   });
@@ -60,17 +79,18 @@ function inject($, process, base, cb, opts) {
 
   $(opts.tag).each(function(idx, el) {
     el = $(el);
-    if(opts.test(el)) {
+    if(opts.filter(el)) {
       items.push(el);
     }
   });
 
   if(items.length) {
-    var done = _.after(items.length, cb);
-    _.each(items, function(el) {
-      if (fs.existsSync(path.join(base, opts.getSrc(el)))) {
-        gulp.src(path.join(base, opts.getSrc(el)))
-          .pipe(process)
+    var done = after(items.length, cb);
+    items.forEach(function(el) {
+      var file = path.join(base, opts.getSrc(el));
+      if (fs.existsSync(file)) {
+        gulp.src(file)
+          .pipe(process || noop())
           .pipe(replace(el, opts.template))
           .pipe(through.obj(function(file, enc, cb) {
             cb();
@@ -86,21 +106,20 @@ function inject($, process, base, cb, opts) {
 
 module.exports = function(opts) {
   return through.obj(function(file, enc, cb) {
-    var $ = cheerio.load(String(file.contents))
-      , self = this
-      , typeKeys = Object.getOwnPropertyNames(typeMap)
-      , done = _.after(typeKeys.length, function() {
-        file.contents = new Buffer($.html());
-        self.push(file);
-        cb();
-      });
+    var self = this;
+    var $ = cheerio.load(String(file.contents));
+    var typeKeys = Object.getOwnPropertyNames(typeMap);
+    var done = after(typeKeys.length, function() {
+      file.contents = new Buffer($.html());
+      self.push(file);
+      cb();
+    });
 
     opts = opts || {};
     opts.base = opts.base || '';
 
     typeKeys.forEach(function(type) {
-      inject($, opts[type] || gutil.noop(), opts.base, done, typeMap[type]);
+      inject($, opts[type], opts.base, done, typeMap[type]);
     });
-
   });
 };
