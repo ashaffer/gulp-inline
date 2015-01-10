@@ -28,7 +28,7 @@ gulp.src('public/index.html')
   .pipe(gulp.dest('dist/'));
 ```
 
-Replaces your <script> and <link> tags with the corresponding inlined files.
+Replaces your &lt;script&gt; and &lt;link&gt; tags with the corresponding inlined files.
 
 ## Options
 
