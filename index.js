@@ -25,7 +25,7 @@ var typeMap = {
       return '<script type="text/javascript">\n' + String(contents) + '\n</script>';
     },
     filter: function(el) {
-      return el.attr('type') === 'text/javascript' && isLocal(el.attr('src'));
+      return isLocal(el.attr('src'));
     },
     getSrc: function(el) {
       return el.attr('src');
