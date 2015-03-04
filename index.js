@@ -9,7 +9,7 @@ var typeMap = {
   css: {
     tag: 'link',
     template: function(contents) {
-      return '<style>\n' + contents + '\n</style>'
+      return '<style>\n' + String(contents) + '\n</style>';
     },
     filter: function(el) {
       return el.attr('rel') === 'stylesheet' && isLocal(el.attr('href'));
@@ -22,7 +22,7 @@ var typeMap = {
   js: {
     tag: 'script',
     template: function(contents) {
-      return '<script type="text/javascript">\n' + contents + '\n</script>';
+      return '<script type="text/javascript">\n' + String(contents) + '\n</script>';
     },
     filter: function(el) {
       return el.attr('type') === 'text/javascript' && isLocal(el.attr('src'));
@@ -32,10 +32,25 @@ var typeMap = {
     }
   },
 
+  img: {
+    tag: 'img',
+    template: function(contents, el) {
+      el.attr('src', 'data:image/unknown;base64,' + contents.toString('base64'));
+      return cheerio.html(el);
+    },
+    filter: function(el) {
+      var src = el.attr('src');
+      return !/\.svg$/.test(src);
+    },
+    getSrc: function(el) {
+      return el.attr('src');
+    }
+  },
+
   svg: {
     tag: 'img',
     template: function(contents) {
-      return contents;
+      return String(contents);
     },
     filter: function(el) {
       var src = el.attr('src');
@@ -68,7 +83,7 @@ function isLocal(href) {
 
 function replace(el, tmpl) {
   return through.obj(function(file, enc, cb) {
-    el.replaceWith(tmpl(String(file.contents)));
+    el.replaceWith(tmpl(file.contents, el));
     this.push(file);
     cb();
   });
