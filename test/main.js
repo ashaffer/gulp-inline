@@ -36,4 +36,8 @@ describe('gulp-inline', function() {
   it('should inline a basic template', function(done) {
     inputOutput('basic', done);
   });
+  
+  it('should work with inline event listeners', function(done) {
+    inputOutput('inline-events', done);
+  });
 });
