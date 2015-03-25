@@ -8,8 +8,11 @@ var fs = require('fs');
 var typeMap = {
   css: {
     tag: 'link',
-    template: function(contents) {
-      return '<style>\n' + String(contents) + '\n</style>';
+    template: function(contents, el) {
+      var attribute = el.attr('media');
+      attribute = attribute ? ' media="' + attribute +  '" ' : '';
+
+      return '<style' + attribute + '>\n' + String(contents) + '\n</style>';
     },
     filter: function(el) {
       return el.attr('rel') === 'stylesheet' && isLocal(el.attr('href'));
