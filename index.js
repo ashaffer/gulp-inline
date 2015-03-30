@@ -122,7 +122,7 @@ function inject($, process, base, cb, opts) {
 module.exports = function(opts) {
   return through.obj(function(file, enc, cb) {
     var self = this;
-    var $ = cheerio.load(String(file.contents));
+    var $ = cheerio.load(String(file.contents), {decodeEntities: false});
     var typeKeys = Object.getOwnPropertyNames(typeMap);
     var done = after(typeKeys.length, function() {
       file.contents = new Buffer($.html());

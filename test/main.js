@@ -1,10 +1,10 @@
-var chai = require('chai')
-  , expect = chai.expect
-  , gulp = require('gulp')
-  , through = require('through2')
-  , fs = require('fs')
-  , path = require('path')
-  , inline = require('../');
+var chai = require('chai');
+var expect = chai.expect;
+var gulp = require('gulp');
+var through = require('through2');
+var fs = require('fs');
+var path = require('path');
+var inline = require('..');
 
 describe('gulp-inline', function() {
   function inputOutput(name, done) {
@@ -36,8 +36,12 @@ describe('gulp-inline', function() {
   it('should inline a basic template', function(done) {
     inputOutput('basic', done);
   });
-  
+
   it('should work with inline event listeners', function(done) {
     inputOutput('inline-events', done);
+  });
+
+  it('should not automatically create unnecessary html entities', function(done) {
+    inputOutput('apostrophe', done);
   });
 });
