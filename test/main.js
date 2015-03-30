@@ -44,4 +44,8 @@ describe('gulp-inline', function() {
   it('should not automatically create unnecessary html entities', function(done) {
     inputOutput('apostrophe', done);
   });
+
+  it('should not duplicate css', function(done) {
+    inputOutput('duplicate-css', done);
+  });
 });
