@@ -92,7 +92,7 @@ function replace(el, tmpl) {
   });
 }
 
-function inject($, process, base, cb, opts) {
+function inject($, process, base, cb, opts, relative) {
   var items = [];
 
   $(opts.tag).each(function(idx, el) {
@@ -105,7 +105,8 @@ function inject($, process, base, cb, opts) {
   if(items.length) {
     var done = after(items.length, cb);
     items.forEach(function(el) {
-      var file = path.join(base, opts.getSrc(el));
+      var src = opts.getSrc(el);
+      var file = path.join(src[0] === '/' ? base : relative, src);
       if (fs.existsSync(file)) {
         gulp.src(file)
           .pipe(process || noop())
@@ -123,6 +124,9 @@ function inject($, process, base, cb, opts) {
 }
 
 module.exports = function(opts) {
+  opts = opts || {};
+  opts.base = opts.base || '';
+
   return through.obj(function(file, enc, cb) {
     var self = this;
     var $ = cheerio.load(String(file.contents), {decodeEntities: false});
@@ -133,11 +137,8 @@ module.exports = function(opts) {
       cb();
     });
 
-    opts = opts || {};
-    opts.base = opts.base || '';
-
     typeKeys.forEach(function(type) {
-      inject($, opts[type], opts.base, done, typeMap[type]);
+      inject($, opts[type], opts.base, done, typeMap[type], path.dirname(file.path));
     });
   });
 };

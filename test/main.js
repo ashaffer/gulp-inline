@@ -5,10 +5,10 @@ var through = require('through2');
 var fs = require('fs');
 var path = require('path');
 var inline = require('..');
+var base = 'test/fixtures';
 
 describe('gulp-inline', function() {
   function inputOutput(name, done) {
-    var base = 'test/fixtures';
     gulp.src(path.join(base, name + '.html'))
       .pipe(inline({base: base}))
       .on('data', function(file) {
@@ -47,5 +47,14 @@ describe('gulp-inline', function() {
 
   it('should not duplicate css', function(done) {
     inputOutput('duplicate-css', done);
+  });
+
+  it('should inline using relative paths when src not absolute', function(done) {
+    gulp.src(path.join(base, 'relative.html'))
+      .pipe(inline())
+      .on('data', function(file) {
+        expect(String(file.contents)).to.equal(fs.readFileSync(path.join(base, 'basic-output.html'), 'utf8'));
+        done();
+      });
   });
 });
