@@ -105,7 +105,7 @@ function inject($, process, base, cb, opts, relative) {
   if(items.length) {
     var done = after(items.length, cb);
     items.forEach(function(el) {
-      var src = opts.getSrc(el);
+      var src = opts.getSrc(el) || '';
       var file = path.join(src[0] === '/' ? base : relative, src);
       if (fs.existsSync(file)) {
         gulp.src(file)
