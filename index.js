@@ -106,18 +106,15 @@ function inject($, process, base, cb, opts, relative, ignoredFiles) {
     var done = after(items.length, cb);
     items.forEach(function(el) {
       var src = opts.getSrc(el) || '';
-      if (ignoredFiles.indexOf(src) === -1) {
-        var file = path.join(src[0] === '/' ? base : relative, src);
-        if (fs.existsSync(file)) {
-          gulp.src(file)
-            .pipe(process || noop())
-            .pipe(replace(el, opts.template))
-            .pipe(through.obj(function(file, enc, cb) {
-              cb();
-            }, done));
-        } else {
-          done();
-        }
+      var file = path.join(src[0] === '/' ? base : relative, src);
+
+      if (fs.existsSync(file) && ignoredFiles.indexOf(src) === -1) {
+        gulp.src(file)
+          .pipe(process || noop())
+          .pipe(replace(el, opts.template))
+          .pipe(through.obj(function(file, enc, cb) {
+            cb();
+          }, done));
       } else {
         done();
       }
@@ -131,6 +128,7 @@ module.exports = function(opts) {
   opts = opts || {};
   opts.base = opts.base || '';
   opts.ignore = opts.ignore || [];
+  opts.disabledTypes = opts.disabledTypes || [];
 
   return through.obj(function(file, enc, cb) {
     var self = this;
@@ -143,7 +141,11 @@ module.exports = function(opts) {
     });
 
     typeKeys.forEach(function(type) {
-      inject($, opts[type], opts.base, done, typeMap[type], path.dirname(file.path), opts.ignore);
+      if (opts.disabledTypes.indexOf(type) === -1) {
+        inject($, opts[type], opts.base, done, typeMap[type], path.dirname(file.path), opts.ignore);
+      } else {
+        done();
+      }
     });
   });
 };

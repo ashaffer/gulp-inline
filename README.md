@@ -24,6 +24,7 @@ gulp.src('public/index.html')
     base: 'public/',
     js: uglify(),
     css: minifyCss(),
+    disabledTypes: ['svg', 'img', 'js'], // Only inline css files
     ignore: ['./css/do-not-inline-me.css']
   }))
   .pipe(gulp.dest('dist/'));
@@ -39,5 +40,5 @@ Plugin options:
   * css - css transform (gulp plugin)
   * js - js transform (gulp plugin)
   * svg - svg transform (gulp plugin)
-  * ignore - an array of file paths to ignore and not inline (file paths as they appear in the source)
-
+  * ignore - array of file paths to ignore and not inline (file paths as they appear in the source)
+  * disabledTypes - array of types not to run inlining operations on (css, svg, js, img)
