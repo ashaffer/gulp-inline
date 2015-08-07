@@ -57,4 +57,28 @@ describe('gulp-inline', function() {
         done();
       });
   });
+
+  it('should ignore files if option is set', function(done) {
+    gulp.src(path.join(base, 'ignore.html'))
+      .pipe(inline({
+        ignore: ['/ignore.js', '/ignore.css', '/ignore.svg'],
+        base: base
+      }))
+      .on('data', function(file) {
+        expect(String(file.contents)).to.equal(fs.readFileSync(path.join(base, 'ignore-output.html'), 'utf8'));
+        done();
+      });
+  });
+
+  it('should ignore tag types if option is set', function(done) {
+    gulp.src(path.join(base, 'disable.html'))
+      .pipe(inline({
+        disabledTypes: ['svg', 'img', 'js', 'css'],
+        base: base
+      }))
+      .on('data', function(file) {
+        expect(String(file.contents)).to.equal(fs.readFileSync(path.join(base, 'disable-output.html'), 'utf8'));
+        done();
+      });
+  });
 });
