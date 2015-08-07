@@ -92,7 +92,7 @@ function replace(el, tmpl) {
   });
 }
 
-function inject($, process, base, cb, opts, relative) {
+function inject($, process, base, cb, opts, relative, ignoredFiles) {
   var items = [];
 
   $(opts.tag).each(function(idx, el) {
@@ -106,14 +106,18 @@ function inject($, process, base, cb, opts, relative) {
     var done = after(items.length, cb);
     items.forEach(function(el) {
       var src = opts.getSrc(el) || '';
-      var file = path.join(src[0] === '/' ? base : relative, src);
-      if (fs.existsSync(file)) {
-        gulp.src(file)
-          .pipe(process || noop())
-          .pipe(replace(el, opts.template))
-          .pipe(through.obj(function(file, enc, cb) {
-            cb();
-          }, done));
+      if (ignoredFiles.indexOf(src) === -1) {
+        var file = path.join(src[0] === '/' ? base : relative, src);
+        if (fs.existsSync(file)) {
+          gulp.src(file)
+            .pipe(process || noop())
+            .pipe(replace(el, opts.template))
+            .pipe(through.obj(function(file, enc, cb) {
+              cb();
+            }, done));
+        } else {
+          done();
+        }
       } else {
         done();
       }
@@ -126,6 +130,7 @@ function inject($, process, base, cb, opts, relative) {
 module.exports = function(opts) {
   opts = opts || {};
   opts.base = opts.base || '';
+  opts.ignore = opts.ignore || [];
 
   return through.obj(function(file, enc, cb) {
     var self = this;
@@ -138,7 +143,7 @@ module.exports = function(opts) {
     });
 
     typeKeys.forEach(function(type) {
-      inject($, opts[type], opts.base, done, typeMap[type], path.dirname(file.path));
+      inject($, opts[type], opts.base, done, typeMap[type], path.dirname(file.path), opts.ignore);
     });
   });
 };
