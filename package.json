@@ -1,6 +1,6 @@
 {
   "name": "gulp-inline",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "description": "Inline styles and scripts into an html file.",
   "main": "index.js",
   "scripts": {
