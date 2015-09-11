@@ -22,6 +22,10 @@ describe('gulp-inline', function () {
     inputOutput('js', done)
   })
 
+  it('should preserve attributes', function (done) {
+    inputOutput('attrs', done)
+  })
+
   it('should inline SVG', function (done) {
     inputOutput('svg', done)
   })

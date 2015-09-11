@@ -32,8 +32,9 @@ var typeMap = {
 
   js: {
     tag: 'script',
-    template: function (contents) {
-      return '<script type="text/javascript">\n' + String(contents) + '\n</script>'
+    template: function (contents, el) {
+      var str = stringifyAttrs(without(el[0].attribs, 'src'))
+      return '<script ' + str + '>\n' + String(contents) + '\n</script>'
     },
     filter: function (el) {
       return isLocal(el.attr('src'))
@@ -60,8 +61,9 @@ var typeMap = {
 
   svg: {
     tag: 'img',
-    template: function (contents) {
-      return String(contents)
+    template: function (contents, el) {
+      var $ = cheerio.load(String(contents), {decodeEntities: false})
+      return cheerio.html($('svg').attr(without(el.attr(), 'src')))
     },
     filter: function (el) {
       var src = el.attr('src')
@@ -164,6 +166,23 @@ function after (n, cb) {
 
 function isLocal (href) {
   return href && href.slice(0, 2) !== '//' && !url.parse(href).hostname
+}
+
+function without (o, keys) {
+  keys = [].concat(keys)
+  return Object.keys(o).reduce(function (memo, key) {
+    if (keys.indexOf(key) === -1) {
+      memo[key] = o[key]
+    }
+
+    return memo
+  }, {})
+}
+
+function stringifyAttrs (attrs) {
+  return Object.keys(attrs).map(function (key) {
+    return [key, attrs[key]].join('=')
+  }).join(' ')
 }
 
 /**
