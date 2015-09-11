@@ -1,6 +1,6 @@
 {
   "name": "gulp-inline",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "description": "Inline styles and scripts into an html file.",
   "main": "index.js",
   "scripts": {
@@ -26,7 +26,10 @@
     "gulp": "^3.8.7"
   },
   "standard": {
-    "globals": ["it", "describe"]
+    "globals": [
+      "it",
+      "describe"
+    ]
   },
   "keywords": [
     "inline",
