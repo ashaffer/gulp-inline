@@ -78,6 +78,10 @@ var typeMap = {
 function inject ($, process, base, cb, opts, relative, ignoredFiles) {
   var items = []
 
+  if (!process) {
+    process = noop;
+  }
+
   $(opts.tag).each(function (idx, el) {
     el = $(el)
     if (opts.filter(el)) {
@@ -93,7 +97,7 @@ function inject ($, process, base, cb, opts, relative, ignoredFiles) {
 
       if (fs.existsSync(file) && ignoredFiles.indexOf(src) === -1) {
         gulp.src(file)
-          .pipe(process || noop())
+          .pipe(process())
           .pipe(replace(el, opts.template))
           .pipe(through.obj(function (file, enc, cb) {
             cb()

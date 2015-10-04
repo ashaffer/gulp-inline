@@ -22,8 +22,8 @@ var inline = require('gulp-inline')
 gulp.src('public/index.html')
   .pipe(inline({
     base: 'public/',
-    js: uglify(),
-    css: minifyCss(),
+    js: uglify,
+    css: minifyCss,
     disabledTypes: ['svg', 'img', 'js'], // Only inline css files
     ignore: ['./css/do-not-inline-me.css']
   }))
