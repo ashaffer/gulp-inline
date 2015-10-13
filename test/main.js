@@ -83,6 +83,10 @@ describe('gulp-inline', function () {
       })
   })
 
+  it('should inline SVG referenced in <use> tag', function (done) {
+    inputOutput('svg-use', done)
+  })
+
   function inputOutput (name, done) {
     gulp.src(path.join(base, name + '.html'))
       .pipe(inline({base: base}))
