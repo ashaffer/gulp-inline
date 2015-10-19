@@ -60,17 +60,55 @@ var typeMap = {
   },
 
   svg: {
-    tag: 'img',
+    tag: ['img', 'svg'],
     template: function (contents, el) {
-      var $ = cheerio.load(String(contents), {decodeEntities: false})
-      return cheerio.html($('svg').attr(without(el.attr(), 'src')))
+      var tag = el[0].tagName,
+          $ = cheerio.load(String(contents), {decodeEntities: false})
+
+      switch (tag) {
+        case 'img':
+          return cheerio.html($('svg').attr(without(el.attr(), 'src')))
+          break
+        case 'svg':
+          return cheerio.html($('svg').removeAttr('id').attr(without(el.attr(), 'src')))
+          break
+      }
     },
     filter: function (el) {
-      var src = el.attr('src')
-      return /\.svg$/.test(src) && isLocal(src)
+      var tag = el[0].tagName
+
+      switch (tag) {
+        case 'img':
+          var src = el.attr('src')
+          return /\.svg$/.test(src) && isLocal(src)
+          break
+        case 'svg':
+          var children = el.children(),
+              child    = children.first(),
+              src      = child.attr('xlink:href')
+
+          // Return TRUE if element contains only one child element and
+          // that child element is a <use> element with xlink:href
+          // attribute which refers to some random ID (which according to
+          // HTML5 spec should contain at least one character and shouldn't
+          // contain spaces) in external SVG file
+          return children.length === 1
+            && child[0].tagName === 'use'
+            && /\.svg#\S+$/.test(src)
+          break
+      }
     },
     getSrc: function (el) {
-      return el.attr('src')
+      var tag = el[0].tagName
+
+      switch (tag) {
+        case 'img':
+          return el.attr('src')
+        case 'svg':
+          // Return "/foo.svg" out of "/foo.svg#SomeIdentifier"
+          return el.children().first().attr('xlink:href').match(/[^#]+/)[0]
+          break
+      }
     }
   }
 }
@@ -79,14 +117,19 @@ function inject ($, process, base, cb, opts, relative, ignoredFiles) {
   var items = []
 
   if (!process) {
-    process = noop;
+    process = noop
   }
 
-  $(opts.tag).each(function (idx, el) {
-    el = $(el)
-    if (opts.filter(el)) {
-      items.push(el)
-    }
+  // Normalize tags
+  var tags = opts.tag instanceof Array ? opts.tag : [opts.tag]
+
+  tags.forEach(function(tag) {
+    $(tag).each(function (idx, el) {
+      el = $(el)
+      if (opts.filter(el)) {
+        items.push(el)
+      }
+    })
   })
 
   if (items.length) {

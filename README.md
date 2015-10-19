@@ -32,6 +32,54 @@ gulp.src('public/index.html')
 
 Replaces your &lt;script&gt; and &lt;link&gt; tags with the corresponding inlined files.
 
+## SVG support
+
+Currently there are two supported methods:
+
+- `<img>` element with `src` attribute:
+
+  ```
+  <img src="/assets/icon.svg" class="MyClass" />
+  ```
+
+  which will be converted to something like
+
+  ```
+  <svg xmlns="http://www.w3.org/2000/svg" viewbox="..." class="MyClass">
+    <circle ... />
+    <path ... />
+    etc.
+  </svg>
+  ```
+
+  depending on what `/assets/icon.svg` contains
+
+- `<svg>` element with `<use>` child element:
+
+  ```
+  <svg>
+    <use xlink:href="/assets/icon.svg#MyIdentifier"></use>
+  </svg>
+  ```
+
+  Note that this method requires an ID matching the ID of target SVG root element.
+
+  This is valid target SVG for the example above:
+
+  ```
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" id="MyIdentifier">
+    ...
+  </svg>
+  ```
+
+  while this is invalid:
+
+  ```
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+    ...
+  </svg>
+  ```
+
 ## Options
 
 Plugin options:

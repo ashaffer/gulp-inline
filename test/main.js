@@ -94,18 +94,22 @@ describe('gulp-inline', function () {
         assert.equal(String(file.contents), fs.readFileSync(path.join(base, 'basic-transform-output.html'), 'utf8'))
         done()
       })
-  });
+  })
 
   function dummyTransform() {
     return new transform({
       objectMode: true,
       transform: function(file, enc, cb) {
-        file.contents = new Buffer("Transformed file");
-        this.push(file);
-        cb();
+        file.contents = new Buffer("Transformed file")
+        this.push(file)
+        cb()
       }
-    });
+    })
   }
+
+  it('should inline SVG referenced in <use> tag', function (done) {
+    inputOutput('svg-use', done)
+  })
 
   function inputOutput (name, done) {
     gulp.src(path.join(base, name + '.html'))
