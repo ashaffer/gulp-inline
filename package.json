@@ -1,6 +1,6 @@
 {
   "name": "gulp-inline",
-  "version": "0.0.14",
+  "version": "0.1.0",
   "description": "Inline styles and scripts into an html file.",
   "main": "index.js",
   "scripts": {
@@ -23,7 +23,8 @@
     "coverage-percentage": "*",
     "coverage-badge": "git://github.com/ashaffer/node-coverage-badge#patch-1",
     "istanbul": "~0.2.6",
-    "gulp": "^3.8.7"
+    "gulp": "^3.8.7",
+    "readable-stream": "^2.0.0"
   },
   "standard": {
     "globals": [
