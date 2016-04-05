@@ -60,7 +60,7 @@ var typeMap = {
   },
 
   svg: {
-    tag: ['img', 'svg'],
+    tag: ['img', 'svg', 'object'],
     template: function (contents, el) {
       var tag = el[0].tagName,
           $ = cheerio.load(String(contents), {decodeEntities: false})
@@ -68,6 +68,9 @@ var typeMap = {
       switch (tag) {
         case 'img':
           return cheerio.html($('svg').attr(without(el.attr(), 'src')))
+          break
+        case 'object':
+          return cheerio.html($('svg').attr(without(el.attr(), 'data')))
           break
         case 'svg':
           return cheerio.html($('svg').removeAttr('id').attr(without(el.attr(), 'src')))
@@ -80,6 +83,10 @@ var typeMap = {
       switch (tag) {
         case 'img':
           var src = el.attr('src')
+          return /\.svg$/.test(src) && isLocal(src)
+          break
+        case 'object':
+          var src = el.attr('data')
           return /\.svg$/.test(src) && isLocal(src)
           break
         case 'svg':
@@ -104,6 +111,8 @@ var typeMap = {
       switch (tag) {
         case 'img':
           return el.attr('src')
+        case 'object':
+          return el.attr('data')
         case 'svg':
           // Return "/foo.svg" out of "/foo.svg#SomeIdentifier"
           return el.children().first().attr('xlink:href').match(/[^#]+/)[0]
