@@ -84,7 +84,7 @@ describe('gulp-inline', function () {
       })
   })
 
-  it('should run Transform stream with parameters on files', function(done) {
+  it('should run Transform stream with no parameters on files', function(done) {
     gulp.src(path.join(base, 'basic-transform.html'))
       .pipe(inline({
         css: dummyTransform,
@@ -96,7 +96,7 @@ describe('gulp-inline', function () {
       })
   })
 
-  it('should run Transform stream with no parameters on files', function(done) {
+  it('should run Transform stream with parameters on files', function(done) {
     gulp.src(path.join(base, 'basic-transform.html'))
       .pipe(inline({
         css: dummyTransform({}),
