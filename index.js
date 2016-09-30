@@ -126,7 +126,11 @@ function inject ($, process, base, cb, opts, relative, ignoredFiles) {
   var items = []
 
   if (!process) {
-    process = noop
+    process = []
+  }
+  else if (!(process instanceof Array))
+  {
+    process = [process]
   }
 
   // Normalize tags
@@ -148,8 +152,15 @@ function inject ($, process, base, cb, opts, relative, ignoredFiles) {
       var file = path.join(src[0] === '/' ? base : relative, src)
 
       if (fs.existsSync(file) && ignoredFiles.indexOf(src) === -1) {
-        gulp.src(file)
-          .pipe(process())
+        var stream = gulp.src(file)
+        for (var p of process) {
+          if (typeof p === "function")
+          {
+            p = p();
+          }
+          stream = stream.pipe(p);
+        }
+        stream
           .pipe(replace(el, opts.template))
           .pipe(through.obj(function (file, enc, cb) {
             cb()
@@ -200,13 +211,6 @@ function inline (opts) {
 function replace (el, tmpl) {
   return through.obj(function (file, enc, cb) {
     el.replaceWith(tmpl(file.contents, el))
-    this.push(file)
-    cb()
-  })
-}
-
-function noop () {
-  return through.obj(function (file, enc, cb) {
     this.push(file)
     cb()
   })
