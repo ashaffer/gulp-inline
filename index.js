@@ -128,8 +128,7 @@ function inject ($, process, base, cb, opts, relative, ignoredFiles) {
   if (!process) {
     process = []
   }
-  else if (!(process instanceof Array))
-  {
+  else if (!(process instanceof Array)) {
     process = [process]
   }
 
@@ -154,8 +153,7 @@ function inject ($, process, base, cb, opts, relative, ignoredFiles) {
       if (fs.existsSync(file) && ignoredFiles.indexOf(src) === -1) {
         var stream = gulp.src(file)
         for (var p of process) {
-          if (typeof p === "function")
-          {
+          if (typeof p === "function") {
             p = p();
           }
           stream = stream.pipe(p);
