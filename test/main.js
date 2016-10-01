@@ -84,10 +84,34 @@ describe('gulp-inline', function () {
       })
   })
 
-  it('should run Transform stream on files', function(done) {
+  it('should run Transform stream with no parameters on files', function(done) {
     gulp.src(path.join(base, 'basic-transform.html'))
       .pipe(inline({
         css: dummyTransform,
+        base: base
+      }))
+      .on('data', function (file) {
+        assert.equal(String(file.contents), fs.readFileSync(path.join(base, 'basic-transform-output.html'), 'utf8'))
+        done()
+      })
+  })
+
+  it('should run Transform stream with parameters on files', function(done) {
+    gulp.src(path.join(base, 'basic-transform.html'))
+      .pipe(inline({
+        css: dummyTransform({}),
+        base: base
+      }))
+      .on('data', function (file) {
+        assert.equal(String(file.contents), fs.readFileSync(path.join(base, 'basic-transform-output.html'), 'utf8'))
+        done()
+      })
+  })
+
+  it('should run multiple Transform streams on files', function(done) {
+    gulp.src(path.join(base, 'basic-transform.html'))
+      .pipe(inline({
+        css: [dummyTransform, dummyTransform({})],
         base: base
       }))
       .on('data', function (file) {

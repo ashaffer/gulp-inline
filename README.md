@@ -15,13 +15,14 @@ gulp-inline
 ```javascript
 var inline = require('gulp-inline')
   , uglify = require('gulp-uglify')
-  , minifyCss = require('gulp-minify-css');
+  , minifyCss = require('gulp-minify-css')
+  , autoprefixer = require('gulp-autoprefixer');
 
 gulp.src('public/index.html')
   .pipe(inline({
     base: 'public/',
     js: uglify,
-    css: minifyCss,
+    css: [minifyCss, autoprefixer({ browsers:['last 2 versions'] })],
     disabledTypes: ['svg', 'img', 'js'], // Only inline css files
     ignore: ['./css/do-not-inline-me.css']
   }))
