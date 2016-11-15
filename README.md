@@ -89,3 +89,23 @@ Plugin options:
   * svg - svg transform (gulp plugin)
   * ignore - array of file paths to ignore and not inline (file paths as they appear in the source)
   * disabledTypes - array of types not to run inlining operations on (css, svg, js, img)
+
+### How to set options for uglify when used as plugin
+
+Below is an example of how to pass options to uglify. In this case we tell uglify to not mangle function names.
+
+```javascript
+var inline = require('gulp-inline')
+  , uglify = require('gulp-uglify');
+
+gulp.src('public/index.html')
+  .pipe(inline({
+    base: 'public/',
+    js: function() {
+      return uglify({
+          mangle: false
+      });
+    }
+  }))
+  .pipe(gulp.dest('dist/'));
+```
