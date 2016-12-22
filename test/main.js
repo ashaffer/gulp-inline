@@ -52,12 +52,7 @@ describe('gulp-inline', function () {
   })
 
   it('should inline using relative paths when src not absolute', function (done) {
-    gulp.src(path.join(base, 'relative.html'))
-      .pipe(inline())
-      .on('data', function (file) {
-        assert.equal(String(file.contents), fs.readFileSync(path.join(base, 'basic-output.html'), 'utf8'))
-        done()
-      })
+    inputOutputArgs('relative', undefined, done);
   })
 
   it('should ignore files if option is set', function (done) {
@@ -120,27 +115,40 @@ describe('gulp-inline', function () {
       })
   })
 
-  function dummyTransform() {
-    return new transform({
-      objectMode: true,
-      transform: function(file, enc, cb) {
-        file.contents = new Buffer("Transformed file")
-        this.push(file)
-        cb()
-      }
-    })
-  }
 
   it('should inline SVG referenced in <use> tag', function (done) {
     inputOutput('svg-use', done)
   })
 
-  function inputOutput (name, done) {
-    gulp.src(path.join(base, name + '.html'))
-      .pipe(inline({base: base}))
-      .on('data', function (file) {
-        assert.equal(String(file.contents), fs.readFileSync(path.join(base, name + '-output.html'), 'utf8'))
-        done()
-      })
-  }
+  describe('acceptance-tests', function(){
+    it('should not change case of HTML attributes', function (done) {
+      inputOutput('html-tag-with-upper-attr', done)
+    })
+  })
+
 })
+
+function dummyTransform() {
+  return new transform({
+    objectMode: true,
+    transform: function(file, enc, cb) {
+      file.contents = new Buffer("Transformed file")
+      this.push(file)
+      cb()
+    }
+  })
+}
+
+function inputOutput (name, done) {
+  var args = {base: base}
+  inputOutputArgs(name, args, done);
+}
+
+function inputOutputArgs (name, inlineArgs, done) {
+  gulp.src(path.join(base, name + '.html'))
+    .pipe(inline(inlineArgs))
+    .on('data', function (file) {
+      assert.equal(String(file.contents), fs.readFileSync(path.join(base, name + '-output.html'), 'utf8'))
+      done()
+    })
+}
