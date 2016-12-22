@@ -7,7 +7,7 @@ var gulp = require('gulp')
 var fs = require('fs')
 var path = require('path')
 var inline = require('..')
-var transform = require('readable-stream/transform')
+var Transform = require('readable-stream/transform')
 var base = 'test/fixtures'
 
 /**
