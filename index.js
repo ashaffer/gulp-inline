@@ -67,15 +67,17 @@ var typeMap = {
 
       switch (tag) {
         case 'img':
-          return cheerio.html($('svg').attr(without(el.attr(), 'src')))
+          $('svg').attr(without(el.attr(), 'src'))
           break
         case 'object':
-          return cheerio.html($('svg').attr(without(el.attr(), 'data')))
+          $('svg').attr(without(el.attr(), 'data'))
           break
         case 'svg':
-          return cheerio.html($('svg').removeAttr('id').attr(without(el.attr(), 'src')))
+          $('svg').removeAttr('id').attr(without(el.attr(), 'src'))
           break
       }
+
+      return $.html()
     },
     filter: function (el) {
       var tag = el[0].tagName
