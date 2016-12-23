@@ -52,7 +52,7 @@ describe('gulp-inline', function () {
   })
 
   it('should inline using relative paths when src not absolute', function (done) {
-    inputOutputArgs('relative', undefined, done);
+    inputOutputArgs('relative', undefined, done)
   })
 
   it('should ignore files if option is set', function (done) {
@@ -115,24 +115,22 @@ describe('gulp-inline', function () {
       })
   })
 
-
   it('should inline SVG referenced in <use> tag', function (done) {
     inputOutput('svg-use', done)
   })
 
-  describe('acceptance-tests', function(){
+  describe('acceptance-tests', function() {
     it('should not change case of HTML attributes', function (done) {
       inputOutput('html-tag-with-upper-attr', done)
     })
   })
-
 })
 
 function dummyTransform() {
-  return new transform({
+  return new Transform({
     objectMode: true,
     transform: function(file, enc, cb) {
-      file.contents = new Buffer("Transformed file")
+      file.contents = new Buffer('Transformed file')
       this.push(file)
       cb()
     }
@@ -141,7 +139,7 @@ function dummyTransform() {
 
 function inputOutput (name, done) {
   var args = {base: base}
-  inputOutputArgs(name, args, done);
+  inputOutputArgs(name, args, done)
 }
 
 function inputOutputArgs (name, inlineArgs, done) {
