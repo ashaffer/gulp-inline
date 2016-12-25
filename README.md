@@ -3,6 +3,10 @@ gulp-inline
 
 ## Information
 
+[![Build Status](https://travis-ci.org/ashaffer/gulp-inline.svg?branch=master)](https://travis-ci.org/ashaffer/gulp-inline)
+[![codecov](https://codecov.io/gh/ashaffer/gulp-inline/branch/master/graph/badge.svg)](https://codecov.io/gh/ashaffer/gulp-inline)
+[![npm version](https://img.shields.io/npm/v/gulp-inline.svg)](https://www.npmjs.com/package/gulp-inline)
+
 <table>
   <tr><td>Package</td><td>gulp-inline</td></tr>
   <tr><td>Description</td><td>Inlines js/css/svg into your html files</td></tr>

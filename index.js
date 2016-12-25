@@ -81,20 +81,20 @@ var typeMap = {
     },
     filter: function (el) {
       var tag = el[0].tagName
+      var src
 
       switch (tag) {
         case 'img':
-          var src = el.attr('src')
+          src = el.attr('src')
           return /\.svg$/.test(src) && isLocal(src)
-          break
         case 'object':
-          var src = el.attr('data')
+          src = el.attr('data')
           return /\.svg$/.test(src) && isLocal(src)
-          break
         case 'svg':
           var children = el.children(),
-              child    = children.first(),
-              src      = child.attr('xlink:href')
+              child    = children.first()
+
+          src = child.attr('xlink:href')
 
           // Return TRUE if element contains only one child element and
           // that child element is a <use> element with xlink:href
@@ -104,7 +104,6 @@ var typeMap = {
           return children.length === 1
             && child[0].tagName === 'use'
             && /\.svg#\S+$/.test(src)
-          break
       }
     },
     getSrc: function (el) {
@@ -118,7 +117,6 @@ var typeMap = {
         case 'svg':
           // Return "/foo.svg" out of "/foo.svg#SomeIdentifier"
           return el.children().first().attr('xlink:href').match(/[^#]+/)[0]
-          break
       }
     }
   }
@@ -146,7 +144,7 @@ function inject ($, process, base, cb, opts, relative, ignoredFiles) {
     })
   })
 
-  if (items.length) {
+  if (items.length > 0) {
     var done = after(items.length, cb)
     items.forEach(function (el) {
       var src = opts.getSrc(el) || ''
@@ -155,10 +153,10 @@ function inject ($, process, base, cb, opts, relative, ignoredFiles) {
       if (fs.existsSync(file) && ignoredFiles.indexOf(src) === -1) {
         var stream = gulp.src(file)
         for (var p of process) {
-          if (typeof p === "function") {
-            p = p();
+          if (typeof p === 'function') {
+            p = p()
           }
-          stream = stream.pipe(p);
+          stream = stream.pipe(p)
         }
         stream
           .pipe(replace(el, opts.template))

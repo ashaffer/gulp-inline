@@ -4,8 +4,9 @@
   "description": "Inline styles and scripts into an html file.",
   "main": "index.js",
   "scripts": {
-    "test": "istanbul test ./node_modules/mocha/bin/_mocha --report lcov -- -R spec",
-    "badge": "coverage-badge `coverage-percentage ./coverage/lcov.info --lcov` badge.png"
+    "test": "`npm bin`/mocha",
+    "lint": "`npm bin`/eslint ./",
+    "coverage": "`npm bin`/istanbul cover `npm bin`/_mocha -- --reporter min"
   },
   "repository": {
     "type": "git",
@@ -18,12 +19,13 @@
   },
   "homepage": "https://github.com/ashaffer/gulp-inline",
   "devDependencies": {
-    "mocha": "*",
-    "lcov-parse": "0.0.6",
-    "coverage-percentage": "*",
-    "coverage-badge": "git://github.com/ashaffer/node-coverage-badge#patch-1",
-    "istanbul": "~0.2.6",
+    "eslint": "3.x",
+    "eslint-config-standard": "^6.2.1",
+    "eslint-plugin-promise": "^3.4.0",
+    "eslint-plugin-standard": "^2.0.1",
     "gulp": "^3.8.7",
+    "istanbul": "x",
+    "mocha": "x",
     "readable-stream": "^2.0.0"
   },
   "standard": {
@@ -42,9 +44,9 @@
     "compress html"
   ],
   "dependencies": {
-    "cheerio": "^0.19.0",
-    "event-stream": "~3.1.0",
-    "gulp-util": "^3.0.1",
-    "through2": "~0.4.1"
+    "cheerio": "^0.22.0",
+    "event-stream": "^3.3.4",
+    "gulp-util": "^3.0.7",
+    "through2": "^2.0.3"
   }
 }

@@ -1,0 +1,28 @@
+sudo: false
+
+language: node_js
+
+node_js:
+  - 4
+  - 6
+
+cache:
+  directories:
+    - node_modules
+
+before_install:
+  - npm config set spin false
+
+install:
+  - npm install
+  - npm install -g codecov
+  # - npm install -g bithound
+
+script:
+  - npm run lint
+  - npm test
+  - npm run coverage
+  # - bithound check git@github.com:$TRAVIS_REPO_SLUG.git
+
+after_success:
+  - codecov
