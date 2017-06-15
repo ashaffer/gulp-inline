@@ -122,6 +122,15 @@ var typeMap = {
   }
 }
 
+/**
+ * Validates if the file src matches one of the regex rules
+ */
+function regexFind (ignoredFiles, src) {
+  return ignoredFiles.find(function(ignoreFile) {
+    return src.match(ignoreFile)
+  })
+}
+
 function inject ($, process, base, cb, opts, relative, ignoredFiles) {
   var items = []
 
@@ -150,7 +159,7 @@ function inject ($, process, base, cb, opts, relative, ignoredFiles) {
       var src = opts.getSrc(el) || ''
       var file = path.join(src[0] === '/' ? base : relative, src)
 
-      if (fs.existsSync(file) && ignoredFiles.indexOf(src) === -1) {
+      if (fs.existsSync(file) && !regexFind(ignoredFiles, src)) {
         var stream = gulp.src(file)
         for (var p of process) {
           if (typeof p === 'function') {
@@ -192,9 +201,13 @@ function inline (opts) {
       cb()
     })
 
+    var ignoreFiles = opts.ignore.map(function (ignoreFile) {
+      return new RegExp(ignoreFile)
+    })
+
     typeKeys.forEach(function (type) {
       if (opts.disabledTypes.indexOf(type) === -1) {
-        inject($, opts[type], opts.base, done, typeMap[type], path.dirname(file.path), opts.ignore)
+        inject($, opts[type], opts.base, done, typeMap[type], path.dirname(file.path), ignoreFiles)
       } else {
         done()
       }
