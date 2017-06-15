@@ -67,6 +67,18 @@ describe('gulp-inline', function () {
       })
   })
 
+  it('should ignore files if regex option is set', function (done) {
+    gulp.src(path.join(base, 'ignore-regex.html'))
+      .pipe(inline({
+        ignore: ['/ignore-.*'],
+        base: base
+      }))
+      .on('data', function (file) {
+        assert.equal(String(file.contents), fs.readFileSync(path.join(base, 'ignore-regex-output.html'), 'utf8'))
+        done()
+      })
+  })
+
   it('should ignore tag types if option is set', function (done) {
     gulp.src(path.join(base, 'disable.html'))
       .pipe(inline({
