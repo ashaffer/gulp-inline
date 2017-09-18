@@ -63,7 +63,7 @@ var typeMap = {
     tag: ['img', 'svg', 'object'],
     template: function (contents, el) {
       var tag = el[0].tagName,
-          $ = cheerio.load(String(contents), {decodeEntities: false})
+          $ = cheerio.load(String(contents), Object.assign({decodeEntities: false}, opts.cheerio))
 
       switch (tag) {
         case 'img':
@@ -184,7 +184,7 @@ function inline (opts) {
 
   return through.obj(function (file, enc, cb) {
     var self = this
-    var $ = cheerio.load(String(file.contents), {decodeEntities: false, lowerCaseAttributeNames: false})
+    var $ = cheerio.load(String(file.contents), Object.assign({decodeEntities: false, lowerCaseAttributeNames: false}, opts.cheerio))
     var typeKeys = Object.getOwnPropertyNames(typeMap)
     var done = after(typeKeys.length, function () {
       file.contents = new Buffer($.html())
